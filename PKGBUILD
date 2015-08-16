@@ -1,0 +1,35 @@
+# Maintainer: Andrea Scarpino <andrea@archlinux.org>
+
+pkgname=hansoft
+pkgver=7.1123
+_pkgver=7_1123
+pkgrel=1
+pkgdesc="Agile tool"
+arch=('i686' 'x86_64')
+url="http://www.hansoft.com/"
+license=('custom')
+depends=('alsa-lib' 'util-linux' 'libsm' 'fontconfig' 'libxext' 'libxrender')
+
+if [ "${CARCH}" = 'i686' ]; then
+  _arch=x86
+  md5sums[0]='0e8941446d6acb04b7aa32ff6054936d'
+else
+  _arch=x64
+fi
+source=("http://cache.hansoft.se/${pkgname}_${_pkgver}_${_arch}.deb")
+md5sums=('1ac239812588e0a49257e525d108a387')
+
+package() {
+  tar xf data.tar.gz
+
+  install -d "${pkgdir}"/opt/Hansoft
+  install -m755 opt/Hansoft/{Hansoft,OutOfProcess} \
+    "${pkgdir}"/opt/Hansoft
+
+  install -d "${pkgdir}"/usr/bin
+  ln -s /opt/Hansoft/Hansoft "${pkgdir}"/usr/bin/hansoft
+
+  install -d "${pkgdir}"/usr/share/licenses/${pkgname}
+  install -m644 opt/Hansoft/{License,ThirdPartyLicenses}.txt \
+    "${pkgdir}"/usr/share/licenses/${pkgname}
+}
